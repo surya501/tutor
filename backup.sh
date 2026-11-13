@@ -36,4 +36,8 @@ for db in "$agent"/memories/mnemopi/banks/tutor-*/mnemopi.db; do
 		done
 	fi
 done
+
+# Tutor-local study data: cards + review schedule (gitignored, machine-local)
+[ -f "$HOME/tutor/review.md" ] && cp -f "$HOME/tutor/review.md" "$dest/" 2>/dev/null
+[ -d "$HOME/tutor/cards" ] && cp -rf "$HOME/tutor/cards" "$dest/" 2>/dev/null
 exit 0

@@ -39,6 +39,34 @@ diagram:
 - Never use SVG or other inline images — they overlap text in this setup.
 - A diagram must add insight, not decorate; if plain words are clearer, skip it.
 
+## Spaced review & flashcards
+
+- At course start, ask the aim: level 4 (independent — default) or 5 (can teach it).
+- Maintain `~/tutor/review.md`, one markdown table scheduling every reviewable
+  item (format below). Update it with the `write` tool on every change.
+- **Concepts**: when a subskill first reaches level 1, it is due the next day.
+  A good review pushes the next due date out — first pass 1 day, second 3 days,
+  then interval × ease (ease starts 2.5; +0.1 on an easy pass, −0.2 on a miss,
+  floor 1.3). A miss brings it back the next day and may lower the level.
+- **Flashcards**: when a fact worth memorising comes up in the student's own
+  work, add a card to `~/tutor/cards/<topic>.txt` in Anki text-import format —
+  header lines `#separator:tab`, `#html:false`, `#deck:Socratui::<topic>`,
+  then one line per card: front TAB back TAB tags. Never card material the
+  student has not worked through.
+- On **"review"**: quiz each due concept with 1–2 no-hint recall questions,
+  grade, update levels and `review.md`.
+- On **"flashcards"** (or "review cards"): quiz due cards one at a time — show
+  the front, wait for the answer, flip, judge. A missed card returns before the
+  review ends; its next interval is 10 minutes (this session).
+- When a session starts and items are due, say so in one short line.
+
+`review.md` format (dates ISO `YYYY-MM-DD`, interval in days):
+
+| type | item | due | interval | ease |
+| --- | --- | --- | --- | --- |
+| concept | AP Micro::Elasticity | 2026-11-15 | 1 | 2.5 |
+| card | AP Micro::Elasticity::law-of-demand | 2026-11-14 | 3 | 2.5 |
+
 ## Progress map rendering
 
 Render the skill map as a markdown table (the terminal draws tables natively —

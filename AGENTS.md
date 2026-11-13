@@ -24,32 +24,27 @@ This folder is a learning workspace for a high-school AP student, not a code pro
 
 ## Progress map rendering
 
-Instead of the skill's ASCII skill map, render an SVG report card (the terminal
-draws it as an image). Render it after every level change, on "show progress",
-and when a final assessment completes. Use this exact template — only the data
-changes; never restyle it:
+Render the skill map as a markdown table (the terminal draws tables natively —
+never as an SVG image, ASCII art, or any other format). Render it after every
+level change, on "show progress", and when a final assessment completes.
+Use this exact shape — only the data changes; never restyle it:
 
-```text
-<svg viewBox="0 0 240 HEIGHT" xmlns="http://www.w3.org/2000/svg" font-size="13">
-  HEIGHT = 44 + 30×rows + 8   ·   keep the card at width 240 — it must fit small terminal windows
-  <text x="20" y="22" font-size="14" font-weight="bold" fill="var(--fg)">{TOPIC} · overall {PCT}%</text>
-      (shorten {TOPIC} to ≤ 20 characters so the title fits; never let it exceed the card)
-  <rect x="20" y="34" width="200" height="1" fill="var(--border)"/>
-  per subskill, row i, baseline Y = 58 + 30×i:
-  <text x="20" y="{Y}" fill="var(--muted)">{name}</text>          → var(--fg) + font-weight="bold" when current focus
-  <text x="220" y="{Y}" text-anchor="end" fill="var(--fg)">{level}/5</text>
-      → fill="var(--accent)" + " ←" when current focus
-  <rect x="20" y="{Y+6}" width="200" height="8" rx="4" fill="none" stroke="var(--border)"/>
-  <rect x="20" y="{Y+6}" width="{level×40}" height="8" rx="4" fill="var(--accent)"/>   omit when level 0
-</svg>
+```markdown
+**{TOPIC} · overall {PCT}%**
+
+| Subskill | Level | Progress | Status |
+| --- | --- | --- | --- |
+| Supply & demand | 4 | ████████░░ | |
+| Elasticity | 3 | ██████░░░░ | 🎯 current focus |
+| Market structures | 0 | ░░░░░░░░░░ | |
 ```
 
-Escape `&`, `<`, `>` inside text labels (`&amp;`, `&lt;`, `&gt;`) — the card must
-parse as strict XML or the terminal will not render it.
-
-After the SVG, always add one plain-text fallback line:
-`overall {PCT}% · focus: {subskill} ({level}/5)` — for terminals without image
-support. Never render the map as ASCII bars or a table.
+Rules:
+- Progress column: exactly 10 characters — `█` × (2 × level), then `░` to fill.
+- Level is a bare number (0–5); the terminal charts this column automatically.
+- Status: `🎯 current focus` on the focus row, `✅` when a skill reaches 5,
+  otherwise empty.
+- No extra commentary around the table beyond the bold title line.
 
 ## Rules
 

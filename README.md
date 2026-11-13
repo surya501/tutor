@@ -31,6 +31,15 @@ Just run `tutor` — it resets any local edits to instruction files (student
 machines), pulls this repo, backs up sessions + memory, then opens.
 Manual alternative: `git -C ~/tutor pull`.
 
+## Browser mode (same machine only)
+
+`tutor-web` starts the tutor engine in a detached tmux session and opens
+`http://127.0.0.1:7741` — a local quiz page served by the tutor session itself
+(needs `tmux`). Multiple-choice questions arrive as tappable buttons and short
+answers as a text box; levels, review, and memory are unchanged. If the page
+says "tutor not running", run `tutor-web` again. The engine terminal lives at
+`tmux attach -t tutor` (quit with `/exit`). Nothing leaves the machine.
+
 ## Tamper protection (student machines)
 
 - Instruction files (`AGENTS.md`, config, hook, scripts) are locked read-only.

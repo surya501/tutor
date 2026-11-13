@@ -1,0 +1,44 @@
+# ~/tutor — learning workspace for a high-school AP student. Project-scoped; global config untouched.
+
+# Cheap tutoring models: DeepSeek Flash primary, GLM flash fallback. ~7x cheaper output than the global default.
+modelRoles:
+  default: "~deepseek/deepseek-flash-latest"
+retry:
+  fallbackChains:
+    default:
+      - "~z-ai/glm-flash-latest"
+memory:
+  backend: mnemopi
+mnemopi:
+  scoping: per-project
+  retainEveryNTurns: 2
+autolearn:
+  enabled: true
+autoResume: true
+hideThinkingBlock: true
+
+# Kid-facing presentation: friendly tone, calm transcript, no startup chrome.
+personality: friendly
+display:
+  hideToolActivity: true
+startup:
+  quiet: true
+statusLine:
+  leftSegments: [model, path]
+  rightSegments: [session_name, cost]
+
+# Remove tool surfaces a learning chat never needs (kept: read, web_search, eval for code exercises).
+bash:
+  enabled: false
+edit:
+  mode: none
+astEdit:
+  enabled: false
+browser:
+  enabled: false
+debug:
+  enabled: false
+ida:
+  enabled: false
+launch:
+  enabled: false

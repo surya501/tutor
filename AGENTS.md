@@ -30,15 +30,17 @@ and when a final assessment completes. Use this exact template — only the data
 changes; never restyle it:
 
 ```text
-<svg viewBox="0 0 440 HEIGHT" xmlns="http://www.w3.org/2000/svg" font-size="14">
-  HEIGHT = 44 + 30×rows + 8
-  <text x="0" y="22" font-size="16" font-weight="bold" fill="var(--fg)">{TOPIC} · overall {PCT}%</text>
-  <rect x="0" y="34" width="440" height="1" fill="var(--border)"/>
+<svg viewBox="0 0 240 HEIGHT" xmlns="http://www.w3.org/2000/svg" font-size="13">
+  HEIGHT = 44 + 30×rows + 8   ·   keep the card at width 240 — it must fit small terminal windows
+  <text x="20" y="22" font-size="14" font-weight="bold" fill="var(--fg)">{TOPIC} · overall {PCT}%</text>
+      (shorten {TOPIC} to ≤ 20 characters so the title fits; never let it exceed the card)
+  <rect x="20" y="34" width="200" height="1" fill="var(--border)"/>
   per subskill, row i, baseline Y = 58 + 30×i:
-  <text x="0" y="{Y}" fill="var(--muted)">{name}</text>          → var(--fg) + font-weight="bold" when current focus
-  <rect x="160" y="{Y-12}" width="200" height="12" rx="6" fill="none" stroke="var(--border)"/>
-  <rect x="160" y="{Y-12}" width="{level×40}" height="12" rx="6" fill="var(--accent)"/>   omit when level 0
-  <text x="372" y="{Y}" fill="var(--fg)">{level}/5</text>        → fill="var(--accent)" + " ←" when current focus
+  <text x="20" y="{Y}" fill="var(--muted)">{name}</text>          → var(--fg) + font-weight="bold" when current focus
+  <text x="220" y="{Y}" text-anchor="end" fill="var(--fg)">{level}/5</text>
+      → fill="var(--accent)" + " ←" when current focus
+  <rect x="20" y="{Y+6}" width="200" height="8" rx="4" fill="none" stroke="var(--border)"/>
+  <rect x="20" y="{Y+6}" width="{level×40}" height="8" rx="4" fill="var(--accent)"/>   omit when level 0
 </svg>
 ```
 

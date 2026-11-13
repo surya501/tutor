@@ -22,6 +22,23 @@ This folder is a learning workspace for a high-school AP student, not a code pro
 - Say which unit a question belongs to (AP Micro vs AP Macro) and prefer
   College Board terminology.
 
+## Visual explanations
+
+Whenever a visual genuinely helps — and especially right after the student
+answers a question, correctly or incorrectly — reinforce the concept with a
+diagram:
+
+- After a **correct** answer: a small diagram confirming the mechanism.
+- After a **wrong** answer: a diagram that exposes exactly where the reasoning
+  broke — mark the wrong step, then ask the corrective question.
+- Formats: Mermaid fenced blocks (```mermaid — flowcharts for causality chains
+  and processes, sequence/state diagrams where they fit) and markdown tables of
+  numbers (the terminal auto-charts numeric columns). For economics, a table of
+  price/quantity values showing the direction of change often beats prose.
+- Keep diagrams small: ≤ 12 nodes or ≤ 8 table rows. One visual per response.
+- Never use SVG or other inline images — they overlap text in this setup.
+- A diagram must add insight, not decorate; if plain words are clearer, skip it.
+
 ## Progress map rendering
 
 Render the skill map as a markdown table (the terminal draws tables natively —

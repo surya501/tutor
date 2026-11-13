@@ -7,7 +7,7 @@ and memory stay on each machine in `~/.omp`.
 ## Set up a new computer (once)
 
 ```sh
-git clone <REPO_URL> ~/tutor
+git clone https://github.com/surya501/tutor.git ~/tutor
 ~/tutor/setup.sh          # installs the `tutor` command into ~/.zshrc
 omp models | grep -i deepseek   # verify model access; if empty, log in: omp
 ```

@@ -6,16 +6,24 @@ and memory stay on each machine in `~/.omp`.
 
 ## Set up a student computer (once)
 
+Prerequisites: `git`, `zsh` (the macOS default), and omp with model access.
+
 ```sh
-git clone https://github.com/surya501/tutor.git ~/tutor
-~/tutor/setup.sh                 # student mode: locks files, tamper-reset, backup
-omp models | grep -i deepseek    # verify model access; if empty, run omp and log in
+curl -fsSL https://omp.sh/install | sh   # 1. install omp
+omp                                      # 2. first run: complete onboarding
+                                         #    and log in — the tutor routes via
+                                         #    OpenRouter (DeepSeek); Google and
+                                         #    Z.ai keys enable the fallbacks
+git clone https://github.com/surya501/tutor.git ~/tutor   # 3. the workspace
+~/tutor/setup.sh                         # 4. installs `tutor`, locks files,
+                                         #    enables tamper-reset + backup
+omp models | grep -iE 'deepseek|glm|gemini'               # 5. verify access
 ```
 
-Then open a new terminal and run `tutor`.
+Open a new terminal and run `tutor`.
 
-On the machine you edit and push from, use `~/tutor/setup.sh --editor` instead
-(writable files, no tamper-reset).
+Backups need the machine's cloud drive signed in (OneDrive / iCloud Drive);
+without it, backup silently no-ops until it appears.
 
 ## Update a computer
 

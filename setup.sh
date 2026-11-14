@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # ~/tutor setup — safe to run repeatedly.
-#   setup.sh            student machine: locks instruction files, installs the
-#                       `tutor` and `tutor-web` commands (tamper-reset, backup)
-#   setup.sh --editor   the machine you edit and push from: writable files,
-#                       no tamper-reset (protects uncommitted edits)
+#   setup.sh            student machine: `tutor` opens the web page (engine in
+#                       tmux); `tutor-term` is the terminal flow. Files locked,
+#                       tamper-reset, backup.
+#   setup.sh --editor   the machine you edit and push from: `tutor` is the
+#                       terminal flow, `tutor-web` the browser. Files writable,
+#                       no tamper-reset (protects uncommitted edits).
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -30,13 +32,21 @@ if [ "$editor" -eq 0 ]; then
 '
 fi
 
+if [ "$editor" -eq 0 ]; then
+	mainline='# tutor — one command: the tutor in your browser.
+tutor() { tutor-web; }'
+else
+	mainline='# tutor — terminal flow (editor machine). tutor-web for the browser.
+tutor() { tutor-term; }'
+fi
+
 rc="${ZDOTDIR:-$HOME}/.zshrc"
 touch "$rc"
 
-block=$(cat <<EOF
+block="$(cat <<EOF
 # >>> tutor >>>
-# tutor — open ~/tutor; with saved topics, pick one from the list (Enter = most recent)
-tutor() {
+# tutor-term — the tutor in this terminal; with saved topics, pick one (Enter = most recent)
+tutor-term() {
 	cd ~/tutor || return
 ${resetcmd}	git -C ~/tutor pull --ff-only --quiet 2>/dev/null || true
 ${lockcmd}	~/tutor/backup.sh 2>/dev/null || true
@@ -51,28 +61,38 @@ tutor-web() {
 		return 1
 	}
 	if ! tmux has-session -t tutor 2>/dev/null; then
-		tmux new-session -d -s tutor -c "\$HOME/tutor" "zsh -ic tutor"
+		tmux new-session -d -s tutor -c "\$HOME/tutor" "zsh -ic tutor-term"
 	fi
-	sleep 2
-	(open http://127.0.0.1:7741 2>/dev/null || xdg-open http://127.0.0.1:7741 2>/dev/null) &
-	echo "Tutor page: http://127.0.0.1:7741"
-	echo "Engine terminal: tmux attach -t tutor   (quit the session with /exit)"
+	local i
+	for i in {1..30}; do
+		curl -s -m 1 http://127.0.0.1:7741/boot >/dev/null 2>&1 && break
+		sleep 1
+	done
+	if curl -s -m 1 http://127.0.0.1:7741/boot >/dev/null 2>&1; then
+		(open http://127.0.0.1:7741 2>/dev/null || xdg-open http://127.0.0.1:7741 2>/dev/null) &
+	else
+		echo "Engine didn't start — opening its terminal instead."
+		tmux attach -t tutor
+	fi
 }
+
+${mainline}
 # <<< tutor <<<
 EOF
-)
+)"
 
 sed -i '/^# >>> tutor >>>$/,/^# <<< tutor <<<$/d' "$rc"
 printf '\n%s\n' "$block" >>"$rc"
 
 if [ "$editor" -eq 0 ]; then
 	( cd ~/tutor && git ls-files -z | xargs -0 chmod a-w 2>/dev/null || true )
-	echo "Installed 'tutor' + 'tutor-web' (student mode): instruction files locked"
-	echo "read-only, local edits reset on each launch, sessions+memory back up to"
-	echo "the cloud."
+	echo "Installed 'tutor' (opens the web page), 'tutor-term', 'tutor-web'"
+	echo "(student mode): instruction files locked read-only, local edits reset"
+	echo "on each launch, sessions+memory back up to the cloud."
 else
 	( cd ~/tutor && git ls-files -z | xargs -0 chmod u+w 2>/dev/null || true )
-	echo "Installed 'tutor' + 'tutor-web' (editor mode): files writable, no tamper-reset."
+	echo "Installed 'tutor' (terminal), 'tutor-term', 'tutor-web' (editor mode):"
+	echo "files writable, no tamper-reset."
 fi
 echo "One-time per machine: make sure omp has model access (the tutor models route via OpenRouter)."
 echo "Check with: omp models | grep -i deepseek"

@@ -76,6 +76,13 @@ tutor-web() {
 	fi
 }
 
+# tutor-remote <user@host> — view/answer another machine's tutor page over SSH.
+tutor-remote() {
+	[ -n "\${1:-}" ] || { echo "usage: tutor-remote user@host"; return 1; }
+	echo "Then open http://localhost:7741 — Ctrl+C here to close the tunnel."
+	ssh -L 7741:127.0.0.1:7741 "\$1"
+}
+
 ${mainline}
 # <<< tutor <<<
 EOF

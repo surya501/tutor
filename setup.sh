@@ -54,6 +54,14 @@ ${lockcmd}	~/tutor/backup.sh 2>/dev/null || true
 	if (( \${#s} )); then omp --resume; else omp; fi
 }
 
+# tutor-engine — headless continuation for the web UI: newest session, no picker.
+tutor-engine() {
+	cd ~/tutor || return
+${resetcmd}	git -C ~/tutor pull --ff-only --quiet 2>/dev/null || true
+${lockcmd}	~/tutor/backup.sh 2>/dev/null || true
+	omp --continue
+}
+
 # tutor-web — the tutor in a browser tab (localhost only). Engine runs in tmux.
 tutor-web() {
 	command -v tmux >/dev/null 2>&1 || {
@@ -61,7 +69,7 @@ tutor-web() {
 		return 1
 	}
 	if ! tmux has-session -t tutor 2>/dev/null; then
-		tmux new-session -d -s tutor -c "\$HOME/tutor" "zsh -ic tutor-term"
+		tmux new-session -d -s tutor -c "\$HOME/tutor" "zsh -ic tutor-engine"
 	fi
 	local i
 	for i in {1..30}; do
